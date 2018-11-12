@@ -12,6 +12,7 @@
         </li>
       </ul>
     <b-button @click="fetchJokes" type="submit">Fetch Jokes </b-button>
+    <b-button :pressed.sync="toggleTimer" @click="addRandomJokesAsFavorites" variant="outline-success">Add a random joke to favorites after 5 secs</b-button>
      <ul>
         <li v-for="(item, index) in favoritedJokes" :key="item.id">
             {{item.joke}}
@@ -25,10 +26,19 @@
 
 <script>
 import axios from "axios";
+import { setTimeout, setInterval } from "timers";
 
 export default {
   name: "App",
+  data() {
+    return {
+      toggleTimer: false
+    };
+  },
   computed: {
+    isTimerOn() {
+      return this.$store.state.isTimerOn;
+    },
     jokeList() {
       return this.$store.state.jokeList;
     },
@@ -37,11 +47,24 @@ export default {
     }
   },
   methods: {
+    addRandomJokesAsFavorites() {
+      setInterval(() => {
+        if (this.toggleTimer) {
+          const randomNumberFromZeroToEleven = Math.floor(Math.random() * 11);
+          this.addToFavorties(
+            this.$store.state.jokeList[randomNumberFromZeroToEleven]
+          );
+        }
+      }, 5000);
+    },
     isAlreadyFavorite(id) {
       return this.favoritedJokes.find(joke => joke.id === id);
     },
     addToFavorties(joke) {
-      if (!this.isAlreadyFavorite(joke.id)) {
+      if (
+        !this.isAlreadyFavorite(joke.id) &&
+        this.favoritedJokes.length <= 10
+      ) {
         this.$store.dispatch("addFavoriteJoke", joke);
       }
     },

@@ -14,6 +14,7 @@ const URL = "http://api.icndb.com/jokes/random/10";
 
 export default new Vuex.Store({
   state: {
+    isTimerOn: false,
     jokeList: [],
     favoriteJokes:[]
   },
