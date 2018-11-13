@@ -13,25 +13,16 @@ const vuexPersist = new VuexPersist({
 const URL = "http://api.icndb.com/jokes/random/10";
 
 export default new Vuex.Store({
+  plugins: [vuexPersist.plugin],
   state: {
-    isTimerOn: false,
+    jokesFetched: false,
     jokeList: [],
     favoriteJokes:[]
-  },
-  actions: {
-      fetchJokeList({commit}) {
-        axios.get(URL).then(response => commit('addJokes', response.data.value));
-      },
-      addFavoriteJoke({state, commit}, joke) {
-          commit('addFavoriteJokes', joke)
-      },
-      removeFavoriteJoke({commit}, index) {
-        commit('removeFavoriteJoke', index)
-      }
   },
   mutations: {
     addJokes(state, jokes){
       state.jokeList = jokes
+      state.jokesFetched = true
     },
     addFavoriteJokes(state, joke) {
       state.favoriteJokes.push(joke)
@@ -40,12 +31,15 @@ export default new Vuex.Store({
       state.favoriteJokes.splice(index, 1);
     }
   },
-  // getters: {
-  //   jokeList() {
-  //     return state.jokeList
-  //   },
-  //   favoriteJokes() {
-  //     return state.favoriteJokes
-  //   }
-  // }
+  actions: {
+    fetchJokeList({commit}) {
+      axios.get(URL).then(response => commit('addJokes', response.data.value));
+    },
+    addFavoriteJoke({state, commit}, joke) {
+        commit('addFavoriteJokes', joke)
+    },
+    removeFavoriteJoke({commit}, index) {
+      commit('removeFavoriteJoke', index)
+    }
+  }
 })
