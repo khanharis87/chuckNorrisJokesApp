@@ -15,28 +15,12 @@
 <script>
 export default {
   name: "FavoriteTopTenJokes",
-  props: {
-    timer: {
-      type: Boolean,
-      required: true
-    }
-  },
   computed: {
     favoritedJokes() {
       return this.$store.state.favoriteJokes;
     }
   },
   methods: {
-    addRandomJokesAsFavorites() {
-      setInterval(() => {
-        if (this.timer) {
-          const randomNumberFromZeroToEleven = Math.floor(Math.random() * 11);
-          this.addToFavorties(
-            this.$store.state.jokeList[randomNumberFromZeroToEleven]
-          );
-        }
-      }, 5000);
-    },
     removeFromFavorites(index) {
       this.$store.dispatch("removeFavoriteJoke", index);
     }
