@@ -12,27 +12,14 @@
   </div>
 </template>
 <script>
+import mixin from "../mixin";
+
 export default {
   name: "TopTenJokes",
+  mixins: [mixin],
   computed: {
     jokeList() {
       return this.$store.state.jokeList;
-    },
-    favoritedJokes() {
-      return this.$store.state.favoriteJokes;
-    }
-  },
-  methods: {
-    isAlreadyFavorite(id) {
-      return this.favoritedJokes.find(joke => joke.id === id);
-    },
-    addToFavorties(joke) {
-      if (
-        !this.isAlreadyFavorite(joke.id) &&
-        this.favoritedJokes.length <= 10
-      ) {
-        this.$store.dispatch("addFavoriteJoke", joke);
-      }
     }
   }
 };
